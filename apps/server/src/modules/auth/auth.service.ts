@@ -5,10 +5,9 @@ import { users } from "../users/schema/user.schema";
 import { comparePassword, hashPassword, signToken, verifyToken } from "../../utils/common";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from '../../db/schema';
-import jwt from "jsonwebtoken";
 import { PgliteDatabase } from "drizzle-orm/pglite";
+import { mailerService } from "../../services/mailer.service";
 
-// auth.service.ts
 class AuthService {
   constructor(private db: NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>) {}
 
@@ -97,7 +96,20 @@ class AuthService {
     }
     const token = signToken(user.id, user.email, "5m");
 
+    const link = `${process.env.APP_URL}/verify-reset-password-token?token=${token}`;
+
     // send email
+    await mailerService.sendMail({
+        from: "Micro-Commerce App <onboarding@resend.dev>",
+        to: [user.email],
+        subject: "Reset Password",
+        html: `
+          <p>Hello,</p>
+          <p>You requested a password reset. Please click the link below:</p>
+          <a href="${link}">Reset Password</a>
+          <p>If the button doesn't work, copy and paste this URL into your browser:</p>
+        `,
+    });
 
   }
 

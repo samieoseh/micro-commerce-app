@@ -33,7 +33,7 @@ class AuthController {
    async resetPassword(req: Request, res: Response) {
     const {token, newPassword} = req.body
      await authService.resetPassword({token, newPassword})
-    res.status(200).json({ success: true, message:"A reset link has been sent to the provided email address" });
+    res.status(200).json({ success: true, message:"Password reset successful" });
   }
 }
 
