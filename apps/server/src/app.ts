@@ -1,14 +1,17 @@
 import express, { Application, Request, Response, NextFunction, RequestHandler } from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
 import router from './modules';
+import passport from './config/passport';
+import { errorHandler } from './middleware/error-handler';
+import { morganMiddleware } from './middleware/logger';
 
 const app: Application = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(morgan('dev') as RequestHandler);
+app.use(morganMiddleware);
+app.use(passport.initialize());
 
 app.use("/api/v1", router)
 // Routes
@@ -21,9 +24,6 @@ app.get('/api/v1/healthz', (req: Request, res: Response) => {
 });
 
 // Error handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+app.use(errorHandler);
 
 export default app;
