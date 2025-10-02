@@ -13,6 +13,7 @@ node_modules
 .env.production.local
 /apps/client/.env.development
 /apps/server/.env.*
+/apps/server/logs
 
 # Testing
 coverage

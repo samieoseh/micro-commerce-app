@@ -4,8 +4,10 @@ const env = process.env.NODE_ENV || 'development';
 require('dotenv').config({ path: `.env.${env}` });
 
 import app from './app';
+import "./db"
 
 const PORT = process.env.PORT || 3000;
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running at PORT: ${PORT}`);
