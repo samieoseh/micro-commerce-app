@@ -1,0 +1,92 @@
+export const fontConfig = {
+  displayLarge: {
+    fontFamily: 'BricolageGrotesque-Bold',
+    fontSize: 57,
+    letterSpacing: 0,
+    lineHeight: 64,
+  },
+  displayMedium: {
+    fontFamily: 'BricolageGrotesque-Bold',
+    fontSize: 45,
+    letterSpacing: 0,
+    lineHeight: 52,
+  },
+  displaySmall: {
+    fontFamily: 'BricolageGrotesque-SemiBold',
+    fontSize: 36,
+    letterSpacing: 0,
+    lineHeight: 44,
+  },
+  headlineLarge: {
+    fontFamily: 'BricolageGrotesque-Bold',
+    fontSize: 32,
+    letterSpacing: 0,
+    lineHeight: 40,
+  },
+  headlineMedium: {
+    fontFamily: 'BricolageGrotesque-SemiBold',
+    fontSize: 28,
+    letterSpacing: 0,
+    lineHeight: 36,
+  },
+  headlineSmall: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 24,
+    letterSpacing: 0,
+    lineHeight: 32,
+  },
+  titleLarge: {
+    fontFamily: 'BricolageGrotesque-SemiBold',
+    fontSize: 22,
+    letterSpacing: 0,
+    lineHeight: 28,
+  },
+  titleMedium: {
+    fontFamily: 'BricolageGrotesque-SemiBold',
+    fontSize: 16,
+    letterSpacing: 0.15,
+    lineHeight: 24,
+  },
+  titleSmall: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 14,
+    letterSpacing: 0.1,
+    lineHeight: 20,
+  },
+  labelLarge: {
+    fontFamily: 'BricolageGrotesque-SemiBold',
+    fontSize: 14,
+    letterSpacing: 0.1,
+    lineHeight: 20,
+  },
+  labelMedium: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 12,
+    letterSpacing: 0.5,
+    lineHeight: 16,
+  },
+  labelSmall: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 11,
+    letterSpacing: 0.5,
+    lineHeight: 16,
+  },
+  bodyLarge: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 16,
+    letterSpacing: 0.15,
+    lineHeight: 24,
+  },
+  bodyMedium: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 14,
+    letterSpacing: 0.25,
+    lineHeight: 20,
+  },
+  bodySmall: {
+    fontFamily: 'BricolageGrotesque-Regular',
+    fontSize: 12,
+    letterSpacing: 0.4,
+    lineHeight: 16,
+  },
+};

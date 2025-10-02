@@ -1,53 +1,92 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+export const themes = {
+  lightTheme: {
+    colors: {
+      primary: 'rgb(69, 73, 220)',
+      onPrimary: 'rgb(255, 255, 255)',
+      primaryContainer: 'rgb(225, 224, 255)',
+      onPrimaryContainer: 'rgb(4, 0, 109)',
+      secondary: 'rgb(0, 96, 168)',
+      onSecondary: 'rgb(255, 255, 255)',
+      secondaryContainer: 'rgb(211, 228, 255)',
+      onSecondaryContainer: 'rgb(0, 28, 56)',
+      tertiary: 'rgb(0, 106, 99)',
+      onTertiary: 'rgb(255, 255, 255)',
+      tertiaryContainer: 'rgb(110, 248, 234)',
+      onTertiaryContainer: 'rgb(0, 32, 29)',
+      error: 'rgb(186, 26, 26)',
+      onError: 'rgb(255, 255, 255)',
+      errorContainer: 'rgb(255, 218, 214)',
+      onErrorContainer: 'rgb(65, 0, 2)',
+      background: 'rgb(255, 251, 255)',
+      onBackground: 'rgb(28, 27, 31)',
+      surface: 'rgb(255, 251, 255)',
+      onSurface: 'rgb(28, 27, 31)',
+      surfaceVariant: 'rgb(228, 225, 236)',
+      onSurfaceVariant: 'rgb(70, 70, 79)',
+      outline: 'rgb(119, 118, 128)',
+      outlineVariant: 'rgb(199, 197, 208)',
+      shadow: 'rgb(0, 0, 0)',
+      scrim: 'rgb(0, 0, 0)',
+      inverseSurface: 'rgb(49, 48, 52)',
+      inverseOnSurface: 'rgb(243, 239, 244)',
+      inversePrimary: 'rgb(192, 193, 255)',
+      elevation: {
+        level0: 'transparent',
+        level1: 'rgb(246, 242, 253)',
+        level2: 'rgb(240, 237, 252)',
+        level3: 'rgb(235, 231, 251)',
+        level4: 'rgb(233, 230, 251)',
+        level5: 'rgb(229, 226, 250)',
+      },
+      surfaceDisabled: 'rgba(28, 27, 31, 0.12)',
+      onSurfaceDisabled: 'rgba(28, 27, 31, 0.38)',
+      backdrop: 'rgba(48, 48, 56, 0.4)',
+    },
   },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+
+  darkTheme: {
+    colors: {
+      primary: 'rgb(192, 193, 255)',
+      onPrimary: 'rgb(12, 0, 170)',
+      primaryContainer: 'rgb(42, 43, 196)',
+      onPrimaryContainer: 'rgb(225, 224, 255)',
+      secondary: 'rgb(161, 201, 255)',
+      onSecondary: 'rgb(0, 50, 91)',
+      secondaryContainer: 'rgb(0, 72, 128)',
+      onSecondaryContainer: 'rgb(211, 228, 255)',
+      tertiary: 'rgb(76, 219, 206)',
+      onTertiary: 'rgb(0, 55, 51)',
+      tertiaryContainer: 'rgb(0, 80, 74)',
+      onTertiaryContainer: 'rgb(110, 248, 234)',
+      error: 'rgb(255, 180, 171)',
+      onError: 'rgb(105, 0, 5)',
+      errorContainer: 'rgb(147, 0, 10)',
+      onErrorContainer: 'rgb(255, 180, 171)',
+      background: 'rgb(28, 27, 31)',
+      onBackground: 'rgb(229, 225, 230)',
+      surface: 'rgb(28, 27, 31)',
+      onSurface: 'rgb(229, 225, 230)',
+      surfaceVariant: 'rgb(70, 70, 79)',
+      onSurfaceVariant: 'rgb(199, 197, 208)',
+      outline: 'rgb(145, 143, 154)',
+      outlineVariant: 'rgb(70, 70, 79)',
+      shadow: 'rgb(0, 0, 0)',
+      scrim: 'rgb(0, 0, 0)',
+      inverseSurface: 'rgb(229, 225, 230)',
+      inverseOnSurface: 'rgb(49, 48, 52)',
+      inversePrimary: 'rgb(69, 73, 220)',
+      elevation: {
+        level0: 'transparent',
+        level1: 'rgb(36, 35, 42)',
+        level2: 'rgb(41, 40, 49)',
+        level3: 'rgb(46, 45, 56)',
+        level4: 'rgb(48, 47, 58)',
+        level5: 'rgb(51, 50, 62)',
+      },
+      surfaceDisabled: 'rgba(229, 225, 230, 0.12)',
+      onSurfaceDisabled: 'rgba(229, 225, 230, 0.38)',
+      backdrop: 'rgba(48, 48, 56, 0.4)',
+    },
   },
+
 };
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
