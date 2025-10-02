@@ -1,24 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Slot } from 'expo-router';
+import { useColorScheme } from 'react-native';
+import {
+  configureFonts,
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from 'react-native-paper';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { fontConfig } from '@/constants/fonts';
+import { themes } from '@/constants/theme';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useFonts } from 'expo-font';
+import '../global.css';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+const queryClient = new QueryClient({});
 
 export default function RootLayout() {
+  
   const colorScheme = useColorScheme();
 
+  const themeColors =
+    colorScheme === 'dark' ? themes.darkTheme.colors : themes.lightTheme.colors;
+
+  const paperTheme =
+    colorScheme === 'dark'
+      ? {
+          ...MD3DarkTheme,
+          colors: themeColors,
+          fonts: configureFonts({ config: fontConfig }),
+        }
+      : {
+          ...MD3LightTheme,
+          colors: themeColors,
+          fonts: configureFonts({ config: fontConfig }),
+        };
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <PaperProvider theme={paperTheme}>
+          <Slot />
+        </PaperProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
