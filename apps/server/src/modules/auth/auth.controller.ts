@@ -6,9 +6,7 @@ class AuthController {
   async signup(req: Request, res: Response) {
     const {email, password} = req.body;
     const result = await authService.signup({email, password});
-
-    
-    
+  
     res.status(201).json({ success: true, data: result });
   }
 

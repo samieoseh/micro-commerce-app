@@ -16,7 +16,7 @@ export function SignInPasswordForm() {
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email_address: 'samieoseh@gmail.com',
+      email: 'samieoseh@gmail.com',
       password: 'Password@123',
     },
   });
@@ -35,7 +35,7 @@ export function SignInPasswordForm() {
         <FormTextInput
           control={control}
           label="Email Address"
-          name="email_address"
+          name="email"
           placeholder="E.g example@gmail.com"
         />
         <FormTextInput

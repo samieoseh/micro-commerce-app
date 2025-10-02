@@ -17,6 +17,7 @@ import { getSubFromToken } from '@/src/shared/utils';
 
 export class AuthService {
   static async signIn(payload: SignInFormData) {
+    console.log({payload})
     const result = await safeRequest(() =>
       basicApiClient.post<SigninResponse & { sub: string | null }>(
         AUTH_ENDPOINTS.SIGN_IN,

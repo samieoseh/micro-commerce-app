@@ -10,7 +10,7 @@ export async function safeRequest<T>(
     return await fn();
   } catch (error) {
     const apiError = normalizeError(error);
-    logger.error(apiError.message, { code: apiError.code });
+    //logger.error(apiError.message, { code: apiError.code });
 
     if (showToast) {
       toast(getErrorMessage(apiError));

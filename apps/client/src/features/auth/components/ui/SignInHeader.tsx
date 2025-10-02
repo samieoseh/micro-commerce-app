@@ -1,4 +1,3 @@
-//import Logo from '@/src/shared/components/ui/Logo';
 import React, { Fragment } from 'react';
 import { View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
@@ -9,7 +8,7 @@ export function SignInHeader() {
   return (
     <Fragment>
       {/* <CoownixLogo /> */}
-      <View>
+      <View style={{marginTop:64}}>
         <Text variant="headlineMedium">Sign in</Text>
         <Text
           variant="bodySmall"
