@@ -6,10 +6,11 @@ import { comparePassword, hashPassword, signToken, verifyToken } from "../../uti
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from '../../db/schema';
 import jwt from "jsonwebtoken";
+import { PgliteDatabase } from "drizzle-orm/pglite";
 
 // auth.service.ts
 class AuthService {
-  constructor(private db: NodePgDatabase<typeof schema>) {}
+  constructor(private db: NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>) {}
 
   async signup({email, password}: {email: string, password: string}): Promise<{ id: number, accessToken: string, refreshToken: string }> {
     const userExists = await this.userExists(email);
@@ -75,7 +76,7 @@ class AuthService {
       throw new ApiError(401, "Refresh token not found")
     }
 
-    const payload = jwt.verify(refreshToken, process.env.JWT_SECRET!) as { id: number; email: string };
+    const payload = verifyToken(refreshToken)
 
     const user = await this.getUserByEmail(payload.email);
     if (!user) {
