@@ -13,15 +13,16 @@ class ProductsService {
     async getProducts(page: number, limit: number) {
       const offset = (page - 1) * limit;
 
-      const data = await db
+      const data = await this.db
         .select()
         .from(products)
         .limit(limit)
         .offset(offset);
 
 
+
       // Total count
-      const [countResult] = await db
+      const [countResult] = await this.db
         .select({ count: sql<number>`count(*)` })
         .from(products)
 
@@ -91,7 +92,7 @@ class ProductsService {
       // Pagination
       const offset = (page - 1) * limit;
 
-      const data = await db
+      const data = await this.db
         .select()
         .from(products)
         .where(where)
@@ -100,7 +101,7 @@ class ProductsService {
 
 
       // Total count
-      const [countResult] = await db
+      const [countResult] = await this.db
         .select({ count: sql<number>`count(*)` })
         .from(products)
         .where(where);

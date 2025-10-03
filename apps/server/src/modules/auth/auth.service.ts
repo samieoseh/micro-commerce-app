@@ -99,17 +99,20 @@ class AuthService {
     const link = `${process.env.APP_URL}/verify-reset-password-token?token=${token}`;
 
     // send email
-    await mailerService.sendMail({
-        from: "Micro-Commerce App <onboarding@resend.dev>",
-        to: [user.email],
-        subject: "Reset Password",
-        html: `
-          <p>Hello,</p>
-          <p>You requested a password reset. Please click the link below:</p>
-          <a href="${link}">Reset Password</a>
-          <p>If the button doesn't work, copy and paste this URL into your browser:</p>
-        `,
-    });
+    if (process.env.NODE_ENV !== "test") {
+      await mailerService.sendMail({
+          from: "Micro-Commerce App <onboarding@resend.dev>",
+          to: [user.email],
+          subject: "Reset Password",
+          html: `
+            <p>Hello,</p>
+            <p>You requested a password reset. Please click the link below:</p>
+            <a href="${link}">Reset Password</a>
+            <p>If the button doesn't work, copy and paste this URL into your browser:</p>
+          `,
+      });
+    }
+    
 
   }
 
