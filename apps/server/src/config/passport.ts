@@ -14,7 +14,7 @@ passport.use(
     try {
       const [user] = await db.select().from(users).where(eq(users.id, jwtPayload.id));
       if (user) {
-        return done(null, user);
+        return done(null, user.id);
       }
       return done(null, false);
     } catch (err) {
