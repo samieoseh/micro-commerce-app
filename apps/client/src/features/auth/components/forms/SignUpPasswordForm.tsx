@@ -12,14 +12,10 @@ import { SignUpFormData, signUpSchema } from '../../schemas/sign-up-schema';
 export function SignUpPasswordForm() {
   const { signUp } = useAuth();
   const defaultValues = {
-    first_name: 'Samuel',
-    last_name: 'Oseh',
-    email_address: 'samieoseh@gmail.com',
+    email: 'samieoseh@gmail.com',
     password: 'Password@123',
-    confirm_password: 'Password@123',
-    mobile_number: '+2348131623310',
-    referral_code: '',
-    terms_and_condition: true,
+    confirmPassword: 'Password@123',
+    termsAndondition: true,
   };
   const {
     control,
@@ -34,7 +30,7 @@ export function SignUpPasswordForm() {
     const response = await signUp(data);
 
     if (response) {
-      //router.push('/verify-email');
+      router.push('/');
     }
   };
 
@@ -42,22 +38,11 @@ export function SignUpPasswordForm() {
   return (
     <View>
       <View style={{ marginTop: 10 }}>
-        <FormTextInput
-          control={control}
-          label="First Name"
-          name="first_name"
-          required={true}
-        />
-        <FormTextInput
-          control={control}
-          name="last_name"
-          label="Last Name"
-          required={true}
-        />
+        
         <FormTextInput
           control={control}
           label="Email Address"
-          name="email_address"
+          name="email"
           required={true}
         />
         <FormTextInput
@@ -73,7 +58,7 @@ export function SignUpPasswordForm() {
         
         <Controller
           control={control}
-          name="terms_and_condition"
+          name="termsAndondition"
           render={({ field: { value, onChange } }) => (
             <View
               style={{

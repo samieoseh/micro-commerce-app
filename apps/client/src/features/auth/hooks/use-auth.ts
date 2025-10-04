@@ -20,9 +20,6 @@ export function useAuth() {
     return AuthService.signUp(payload);
   };
 
-
-
- 
   const forgotPassword = async (payload: ForgotPasswordFormData) => {
     return AuthService.forgotPassword(payload);
   };
