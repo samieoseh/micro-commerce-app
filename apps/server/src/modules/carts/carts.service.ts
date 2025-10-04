@@ -146,7 +146,7 @@ class CartsService {
 
       await tx.delete(cartItems).where(eq(cartItems.id, itemId));
 
-      const items = await tx.select().from(cartItems).where(eq(cartItems.cartId, itemId));
+      const items = await tx.select().from(cartItems).where(eq(cartItems.cartId, item.cartId));
 
       if (items.length === 0) {
         await tx.delete(carts).where(eq(carts.id, item.cartId));

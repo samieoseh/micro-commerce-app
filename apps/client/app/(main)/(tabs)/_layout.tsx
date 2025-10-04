@@ -5,9 +5,12 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import TabBarBackground from '@/components/ui/tabbar-background';
 import { useTheme } from 'react-native-paper';
+import { useCarts } from '@/src/features/carts/hooks';
 
 export default function TabLayout() {
   const { colors } = useTheme();
+  const {data: carts} = useCarts();
+  console.log({carts})
   return (
     <Tabs
       screenOptions={{
@@ -36,6 +39,28 @@ export default function TabLayout() {
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
         }}
+      />
+
+       <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'Cart',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="cart.fill" color={color} />
+          ),
+          tabBarBadge: carts?.items.length ? carts?.items?.length : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: colors.primary,
+            color: 'white',
+            fontSize: 12,
+            minWidth: 18,
+            height: 18,
+            borderRadius: 9,
+            textAlign: 'center',
+            lineHeight: 16,
+          },
+        }}
+        
       />
      
     </Tabs>

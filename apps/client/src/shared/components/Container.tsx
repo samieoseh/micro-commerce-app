@@ -72,23 +72,22 @@ export function Container({
         lightColor={colors.background}
         darkColor={colors.background}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <KeyboardAvoidingView
+        {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}> */}
+          {/* <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={{ flex: 1 }}
-          >
+          > */}
             <View
               style={{
                 flex: 1,
-                paddingVertical: 20,
                 width: '92%',
                 alignSelf: 'center',
               }}
             >
               {children}
             </View>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
+          {/* </KeyboardAvoidingView> */}
+        {/* </TouchableWithoutFeedback> */}
       </ThemedView>
     </SafeAreaView>
   );

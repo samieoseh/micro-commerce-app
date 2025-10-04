@@ -1,15 +1,21 @@
-import { View, Text } from 'react-native'
 import React from 'react'
-import { Button } from '@/src/shared/components'
-import { router } from 'expo-router'
+import { Container } from '@/src/shared/components'
+import { IconButton, Text } from 'react-native-paper'
+import { View } from 'react-native'
+import { useAuth } from '@/src/features/auth/hooks'
+import { Products } from '@/src/features/products/components/Products'
 
-export default function Home() {
+export default function HomeScreen() {
+  const {signOut}  = useAuth()
   return (
-     <View className="flex-1 items-center justify-center">
-      <Text className="text-xl font-bold text-blue-500">
-        Welcome to Nativewind!
-      </Text>
-      <Button onPress={() => router.push("/sign-in")}>Go to sign in</Button>
-    </View>
+    <Container>
+      <View className='flex-row justify-between items-center'>
+        <Text variant='bodyLarge'>Welcome User!</Text>
+        <IconButton icon='logout' size={20} onPress={() => {
+          signOut()
+        }} iconColor='red'/>
+      </View>
+      <Products />  
+    </Container>
   )
 }
