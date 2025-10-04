@@ -17,8 +17,6 @@ export const deleteCartValidation = [
 ];
 
 export const addCartItemValidation = [
-    param("userId")
-        .isInt({ gt: 0 }).withMessage("userId must be a positive integer"),
     body("productId")
         .isInt({ gt: 0 }).withMessage("productId must be a positive integer"),
     body("quantity")
@@ -30,8 +28,6 @@ export const addCartItemValidation = [
 ];
 
 export const updateCartItemValidation = [
-    param("userId")
-        .isInt({ gt: 0 }).withMessage("userId must be a positive integer"),
     param("itemId")
         .isInt({ gt: 0 }).withMessage("itemId must be a positive integer"),
     body("quantity")
@@ -44,23 +40,13 @@ export const updateCartItemValidation = [
 ];
 
 export const deleteCartItemValidation = [
-    param("userId")
-        .isInt({ gt: 0 }).withMessage("userId must be a positive integer"),
     param("itemId")
         .isInt({ gt: 0 }).withMessage("itemId must be a positive integer"),
     validate
 ];
 
 export const getCartItemValidation = [
-    param("userId")
-        .isInt({ gt: 0 }).withMessage("userId must be a positive integer"),
     param("itemId")
         .isInt({ gt: 0 }).withMessage("itemId must be a positive integer"),
-    validate
-];
-
-export const clearCartItemsValidation = [
-    param("userId")
-        .isInt({ gt: 0 }).withMessage("userId must be a positive integer"),
     validate
 ];

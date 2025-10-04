@@ -9,7 +9,7 @@ import { PgliteDatabase } from "drizzle-orm/pglite";
 import { mailerService } from "../../services/mailer.service";
 
 class AuthService {
-  constructor(private db: NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>) {}
+  constructor(private db: NodePgDatabase<schema.Schema> | PgliteDatabase<schema.Schema>) {}
 
   async signup({email, password}: {email: string, password: string}): Promise<{ id: number, accessToken: string, refreshToken: string }> {
     const userExists = await this.userExists(email);

@@ -11,7 +11,7 @@ import { productsService } from "../products/products.service";
 
 
 class CartsService {
-  constructor(private db: NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>) {}
+  constructor(private db: NodePgDatabase<schema.Schema> | PgliteDatabase<schema.Schema>) {}
   
   async createCart(userId: number) {
     const cart: Cart = {
@@ -81,6 +81,7 @@ class CartsService {
           productId: payload.productId,
           quantity: payload.quantity,
           price: payload.price,
+          userId
         })
         .returning();
 
@@ -114,24 +115,30 @@ class CartsService {
       return sum + (item.quantity * +item.price)
     }, 0)
 
-    return {items, total};
+    return {items, total, cartId: cart.id};
 
   }
 
-  async updateItem(itemId: number, payload: UpdateCartItemPayload) {
-    const item = await this.getItem(itemId);
+  async updateItem(userId: number, itemId: number, payload: UpdateCartItemPayload) {
+    const item = await this.getItem(userId, itemId);
     if (!item) {
       throw new ApiError(404, "Item not found in cart")
     }
 
-    const [updatedItem] = await this.db.update(cartItems).set(payload).where(eq(cartItems.id, itemId)).returning()
+    const [updatedItem] = await this.db.update(cartItems).set(payload).where(and(
+      eq(cartItems.id, itemId),
+      eq(cartItems.userId, userId)
+    )).returning()
 
     return updatedItem;
   }
 
-  async deleteItem(itemId: number) {
+  async deleteItem(userId: number, itemId: number) {
     await this.db.transaction(async (tx) => {
-      const [item] = await tx.select().from(cartItems).where(eq(cartItems.id, itemId));
+      const [item] = await tx.select().from(cartItems).where(and(
+        eq(cartItems.id, itemId),
+        eq(cartItems.userId, userId)
+      ));
 
       if (!item) {
         throw new ApiError(404, "Item not found in cart");
@@ -147,8 +154,11 @@ class CartsService {
     });
   }
 
-  async getItem(itemId: number) {
-    const [item] = await this.db.select().from(cartItems).where(eq(cartItems.id, itemId));
+  async getItem(userId: number, itemId: number) {
+    const [item] = await this.db.select().from(cartItems).where(and(
+      eq(cartItems.id, itemId),
+      eq(cartItems.userId, userId)
+    ));
 
     return item;
   }

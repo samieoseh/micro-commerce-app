@@ -127,8 +127,8 @@ describe("CartsService", () => {
       const [product] = await db.select().from(products).limit(1);
       const cart = await service.createCart(user.id);
 
-      await service.addItem(user.id, {cartId: cart.id, productId: product.id, price: "100", quantity: 1});
-      const updated = await service.updateItem(user.id, {productId: product.id, quantity: 5});
+      const item = await service.addItem(user.id, {cartId: cart.id, productId: product.id, price: "100", quantity: 1});
+      const updated = await service.updateItem(user.id, item.id, {productId: product.id, quantity: 5});
 
       expect(updated.quantity).toBe(5);
     });
@@ -138,7 +138,7 @@ describe("CartsService", () => {
       const [product] = await db.select().from(products).limit(1);
       const cart = await service.createCart(user.id);
 
-      await expect(service.updateItem(user.id, {productId: product.id, quantity: 5}))
+      await expect(service.updateItem(user.id, 1, {productId: product.id, quantity: 5}))
         .rejects.toThrow(/not found in cart/i);
     });
   });
@@ -150,7 +150,7 @@ describe("CartsService", () => {
       const cart = await service.createCart(user.id);
 
       const item = await service.addItem(user.id, {cartId: cart.id, productId: product.id, price:"100", quantity: 1});
-      await service.deleteItem(item.id);
+      await service.deleteItem(user.id, item.id);
 
       await expect(service.getItems(cart.id))
         .rejects.toThrow(/Cart not found/i);

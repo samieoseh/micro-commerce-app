@@ -5,12 +5,14 @@ import { AddCartItemPayload, UpdateCartItemPayload } from './types/cart';
 
 class CartsController {
   async createCart(req: Request, res: Response) {
-    const result = await cartsService.createCart(+req.params.userId);
+    const user = req.user as {id: number}
+    const result = await cartsService.createCart(user.id);
     res.status(201).json({ data: result, success: true });
   }
 
   async getCart(req: Request, res: Response) {
-    const result = await cartsService.getCart(+req.params.userId);
+    const user = req.user as {id: number}
+    const result = await cartsService.getCart(user.id);
     if (!result) {
       return res.status(404).json({
         success: false,
@@ -21,39 +23,49 @@ class CartsController {
   }
 
   async deleteCart(req: Request, res: Response) {
-    await cartsService.deleteCart(+req.params.userId);
+    const user = req.user as {id: number}
+    await cartsService.deleteCart(user.id);
     res.json({ message: "Cart deleted successfully" });
   }
 
   async addItem(req: Request, res: Response) {
     const payload: AddCartItemPayload = req.body;
-    const result = await cartsService.addItem(+req.params.userId, payload);
+    const user = req.user as {id: number}
+
+    const result = await cartsService.addItem(user.id, payload);
     res.status(201).json({ data: result, success: true });
   }
 
    async clearItems(req: Request, res: Response) {
-    await cartsService.clearItems(+req.params.userId);
+    const user = req.user as {id: number}
+
+    await cartsService.clearItems(user.id);
     res.json({ message: "Cart successfully cleared" });
   }
 
    async getItems(req: Request, res: Response) {
-    const result = await cartsService.getItems(+req.params.userId);
+    const user = req.user as {id: number}
+
+    const result = await cartsService.getItems(user.id);
     res.json({ data: result, success: true });
   }
 
   async updateItem(req: Request, res: Response) {
     const payload: UpdateCartItemPayload = req.body;
-    const result = await cartsService.updateItem(+req.params.itemId, payload);
+    const user = req.user as {id: number}
+    const result = await cartsService.updateItem(user.id, +req.params.itemId, payload);
     res.json({ data: result, success: true });
   }
 
   async deleteItem(req: Request, res: Response) {
-    await cartsService.deleteItem(+req.params.itemId);
+    const user = req.user as {id: number}
+    await cartsService.deleteItem(user.id, +req.params.itemId);
     res.json({ message: "Item deleted successfully", success: true });
   }
 
   async getItem(req: Request, res: Response) {
-    const result = await cartsService.getItem(+req.params.itemId);
+    const user = req.user as {id: number}
+    const result = await cartsService.getItem(user.id, +req.params.itemId);
     res.json({ data: result, success: true });
   }
 }
