@@ -40,9 +40,22 @@ export class AuthService {
   }
 
   static async signUp(payload: SignUpFormData) {
-    return safeRequest(() =>
+    const result = await safeRequest(() =>
       basicApiClient.post<SignupResponse>(AUTH_ENDPOINTS.SIGN_UP, payload),
     );
+
+    if (result?.data?.accessToken && result?.data?.refreshToken) {
+      await tokenStorage.setTokens(
+        result.data.accessToken,
+        result.data.refreshToken,
+      );
+
+      // Decode the JWT for user identification
+      const sub = getSubFromToken(result.data.accessToken);
+      return { ...result, sub };
+    }
+
+    return result
   }
 
   static async forgotPassword(payload: ForgotPasswordFormData) {

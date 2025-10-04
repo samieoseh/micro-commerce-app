@@ -7,7 +7,6 @@ export function SignInHeader() {
 
   return (
     <Fragment>
-      {/* <CoownixLogo /> */}
       <View style={{marginTop:64}}>
         <Text variant="headlineMedium">Sign in</Text>
         <Text

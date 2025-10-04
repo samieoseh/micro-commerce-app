@@ -40,6 +40,7 @@ class BasicApiClient {
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      console.log(`${config.baseURL}${config.url}`);
       return config;
     });
 
@@ -50,7 +51,7 @@ class BasicApiClient {
         const originalRequest: any = error.config;
         // Handle 401 (Unauthorized)
         if (
-          error.response?.status === 401 &&
+          error.response?.status === 401 && (error.response?.data as any)?.code === 'TOKEN_EXPIRED' &&
           !originalRequest._retry // prevent infinite loops
         ) {
           if (isRefreshing) {
@@ -99,7 +100,7 @@ class BasicApiClient {
         const apiError = {
           code: error.response?.status?.toString() || 'NETWORK_ERROR',
           message:
-            (error.response?.data as any)?.data ||
+            (error.response?.data as any)?.message ||
             error.message ||
             'Network error occurred',
           statusCode: error.response?.status,

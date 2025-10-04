@@ -14,6 +14,7 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
     if (!user) {
       return res.status(401).json({
         message: "Unauthorized: You must be logged in to access this resource",
+        code: "TOKEN_EXPIRED"
       });
     }
 
