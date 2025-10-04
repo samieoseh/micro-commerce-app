@@ -74,11 +74,11 @@ class BasicApiClient {
 
             // Call refresh endpoint
             const refreshResponse = await this.client.post('/auth/refresh', {
-              refresh_token: refreshToken,
+              refreshToken: refreshToken,
             });
 
-            const newAccessToken = (refreshResponse.data as any).access_token;
-            const newRefreshToken = (refreshResponse.data as any).refresh_token;
+            const newAccessToken = (refreshResponse.data.data as any).accessToken;
+            const newRefreshToken = (refreshResponse.data.data as any).refreshToken;
 
             await tokenStorage.setTokens(newAccessToken, newRefreshToken);
 
@@ -117,6 +117,7 @@ class BasicApiClient {
   }
 
   async post<T>(url: string, data?: any, config?: any): Promise<T> {
+    console.log({url, data});
     const response = await this.client.post(url, data, config);
     return response.data;
   }

@@ -34,7 +34,7 @@ export function Button(props: ButtonProps & CustomButtonProps) {
 
   // Size map (padding + font size)
   const sizeMap = {
-    sm: { paddingVertical: 4, paddingHorizontal: 12, fontSize: 12 },
+    sm: { paddingVertical: 0, paddingHorizontal: 12, fontSize: 12 },
     lg: { paddingVertical: 8, paddingHorizontal: 16, fontSize: 14 },
     xl: { paddingVertical: 12, paddingHorizontal: 20, fontSize: 16 },
     xxl: { paddingVertical: 16, paddingHorizontal: 28, fontSize: 18 },
