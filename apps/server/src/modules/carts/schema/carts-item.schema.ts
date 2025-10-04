@@ -9,7 +9,7 @@ export const cartItems = pgTable("cart_items", {
         .notNull(),
     productId: integer("product_id")
         .references(() => products.id, { onDelete: "cascade" })
-        .notNull(),
+        .notNull().unique(),
     quantity: integer("quantity").notNull().default(1),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(), 
 });

@@ -18,7 +18,7 @@ router.post('/:userId/items', addCartItemValidation, catchAsync(cartsController.
 router.delete('/:userId/items', clearCartItemsValidation, catchAsync(cartsController.clearItems));
 router.get('/:userId/items', catchAsync(cartsController.getItems));
 
-router.patch('/:userId/items/:itemId', updateCartItemValidation, catchAsync(cartsController.updateItem));
+router.put('/:userId/items/:itemId', updateCartItemValidation, catchAsync(cartsController.updateItem));
 router.delete('/:userId/items/:itemId', deleteCartItemValidation, catchAsync(cartsController.deleteItem));
 router.get('/:userId/items/:itemId', getCartItemValidation, catchAsync(cartsController.getItem));
 

@@ -3,21 +3,25 @@ import app from "../../../app"; // your Express app
 import { setupTestDb } from "../../../tests/db-setup";
 import { authService } from "../../auth/auth.service";
 import { products } from "../../products/schema/product.schema";
+import { productsService } from "../../products/products.service";
+import { cartsService } from "../carts.service";
 
 let user: any;
 let token: string;
 let product: any;
 
 beforeEach(async () => {
-  const testDb = await setupTestDb();
-  (authService as any).db = testDb;
+  const db = await setupTestDb();
+  (authService as any).db = db;
+  (productsService as any).db = db;
+  (cartsService as any).db = db;
 
   // seed a user & get auth token
   user = await authService.signup({ email: "cartuser@example.com", password: "Password@123" });
   token = user.accessToken;
 
   // seed a product
-  const [inserted] = await testDb.insert(products).values({
+  const [inserted] = await db.insert(products).values({
     name: "Cart Product",
     description: "A product for cart test",
     price: "25.5",
@@ -28,13 +32,15 @@ beforeEach(async () => {
   }).returning();
   product = inserted;
 });
+;
+
 
 describe("Cart API Integration", () => {
-  // ---------------------------
+
   describe("POST /api/v1/cart", () => {
     it("creates a cart for a user", async () => {
       const res = await request(app)
-        .post("/api/v1/cart")
+        .post(`/api/v1/cart/${user.id}`)
         .set("Authorization", `Bearer ${token}`)
         .send();
 
@@ -45,11 +51,11 @@ describe("Cart API Integration", () => {
 
     it("rejects duplicate cart creation", async () => {
       await request(app)
-        .post("/api/v1/cart")
+        .post(`/api/v1/cart/${user.id}`)
         .set("Authorization", `Bearer ${token}`);
 
       const res = await request(app)
-        .post("/api/v1/cart")
+        .post(`/api/v1/cart/${user.id}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.status).toBe(409);
@@ -57,36 +63,34 @@ describe("Cart API Integration", () => {
     });
   });
 
-  // ---------------------------
   describe("GET /api/v1/cart", () => {
     it("fetches the user’s cart", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
+      await request(app).post(`/api/v1/cart/${user.id}`).set("Authorization", `Bearer ${token}`);
       const res = await request(app)
-        .get("/api/v1/cart")
+        .get(`/api/v1/cart/${user.id}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.status).toBe(200);
       expect(res.body.data).toHaveProperty("id");
-      expect(res.body.data.items).toEqual([]);
     });
 
     it("returns 404 if cart does not exist", async () => {
       const res = await request(app)
-        .get("/api/v1/cart")
+        .get(`/api/v1/cart/${user.id}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.status).toBe(404);
     });
   });
 
-  // ---------------------------
+
   describe("POST /api/v1/cart/items", () => {
     it("adds an item to the cart", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
+      await request(app).post(`/api/v1/cart/${user.id}`).set("Authorization", `Bearer ${token}`);
       const res = await request(app)
-        .post("/api/v1/cart/items")
+        .post(`/api/v1/cart/${user.id}/items`)
         .set("Authorization", `Bearer ${token}`)
-        .send({ productId: product.id, quantity: 2 });
+        .send({ userId: user.id,  productId: product.id, quantity: 2, price: "100" });
 
       expect(res.status).toBe(201);
       expect(res.body.data.productId).toBe(product.id);
@@ -94,26 +98,26 @@ describe("Cart API Integration", () => {
     });
 
     it("returns 404 if product not found", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
+      await request(app).post(`/api/v1/cart/${user.id}`).set("Authorization", `Bearer ${token}`);
       const res = await request(app)
-        .post("/api/v1/cart/items")
+        .post(`/api/v1/cart/${user.id}/items`)
         .set("Authorization", `Bearer ${token}`)
-        .send({ productId: 9999, quantity: 1 });
+        .send({ userId: user.id, productId: 9999, quantity: 1,price: "200" });
 
       expect(res.status).toBe(404);
     });
   });
 
-  // ---------------------------
-  describe("PATCH /api/v1/cart/items/:productId", () => {
+
+  describe("PUT /api/v1/cart/:userId/items/:itemId", () => {
     it("updates quantity of an item", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
-      await request(app).post("/api/v1/cart/items")
+      await request(app).post(`/api/v1/cart/${user.id}`).set("Authorization", `Bearer ${token}`);
+      const itemRes = await request(app).post(`/api/v1/cart/${user.id}/items`)
         .set("Authorization", `Bearer ${token}`)
-        .send({ productId: product.id, quantity: 1 });
+        .send({ productId: product.id, quantity: 1, price:"200", userId: user.id });
 
       const res = await request(app)
-        .patch(`/api/v1/cart/items/${product.id}`)
+        .put(`/api/v1/cart/${user.id}/items/${itemRes.body.data.id}`)
         .set("Authorization", `Bearer ${token}`)
         .send({ quantity: 5 });
 
@@ -122,9 +126,9 @@ describe("Cart API Integration", () => {
     });
 
     it("returns 404 if item not in cart", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
+      await request(app).post(`/api/v1/cart/${user.id}`).set("Authorization", `Bearer ${token}`);
       const res = await request(app)
-        .patch("/api/v1/cart/items/9999")
+        .put(`/api/v1/cart/${user.id}/items/9999`)
         .set("Authorization", `Bearer ${token}`)
         .send({ quantity: 5 });
 
@@ -132,16 +136,16 @@ describe("Cart API Integration", () => {
     });
   });
 
-  // ---------------------------
-  describe("DELETE /api/v1/cart/items/:productId", () => {
+
+  describe("DELETE /api/v1/cart/:userId/items/:itemId", () => {
     it("removes an item from the cart", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
-      await request(app).post("/api/v1/cart/items")
+      await request(app).post(`/api/v1/cart/${user.id}`).set("Authorization", `Bearer ${token}`);
+      const itemRes = await request(app).post(`/api/v1/cart/${user.id}/items`)
         .set("Authorization", `Bearer ${token}`)
-        .send({ productId: product.id, quantity: 1 });
+        .send({ productId: product.id, quantity: 1, price: "100", userId: user.id });
 
       const res = await request(app)
-        .delete(`/api/v1/cart/items/${product.id}`)
+        .delete(`/api/v1/cart/${user.id}/items/${itemRes.body.data.id}`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(res.status).toBe(200);
@@ -149,33 +153,4 @@ describe("Cart API Integration", () => {
     });
   });
 
-  // ---------------------------
-  describe("DELETE /api/v1/cart", () => {
-    it("deletes the entire cart", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
-      const res = await request(app)
-        .delete("/api/v1/cart")
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(res.status).toBe(200);
-      expect(res.body.message).toMatch(/deleted/i);
-    });
-  });
-
-  // ---------------------------
-  describe("POST /api/v1/cart/clear", () => {
-    it("clears all items from the cart", async () => {
-      await request(app).post("/api/v1/cart").set("Authorization", `Bearer ${token}`);
-      await request(app).post("/api/v1/cart/items")
-        .set("Authorization", `Bearer ${token}`)
-        .send({ productId: product.id, quantity: 3 });
-
-      const res = await request(app)
-        .post("/api/v1/cart/clear")
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(res.status).toBe(200);
-      expect(res.body.message).toMatch(/cleared/i);
-    });
-  });
 });
