@@ -11,7 +11,7 @@ import { mailerService } from "../../services/mailer.service";
 class AuthService {
   constructor(private db: NodePgDatabase<schema.Schema> | PgliteDatabase<schema.Schema>) {}
 
-  async signup({email, password}: {email: string, password: string}): Promise<{ id: number, accessToken: string, refreshToken: string }> {
+  async signup({email, password, role}: {email: string, password: string, role?: string}): Promise<{ id: number, accessToken: string, refreshToken: string, role: string | null }> {
     const userExists = await this.userExists(email);
 
     if (userExists) {
@@ -22,7 +22,8 @@ class AuthService {
 
     const [newUser] = await this.db.insert(users).values({
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role: role ?? "user"
     }).returning()
 
     if (!newUser) {
@@ -33,7 +34,7 @@ class AuthService {
     const refreshToken = signToken(newUser.id, newUser.email, '7d')
 
 
-    return {id: newUser.id, accessToken, refreshToken};
+    return {id: newUser.id, accessToken, refreshToken, role: newUser.role};
   }
 
   async getUserByEmail(email: string) {
@@ -50,7 +51,7 @@ class AuthService {
     return !!user; 
   }
 
-  async login({email, password}: {email: string, password: string}): Promise<{ id: number, accessToken: string, refreshToken: string }> {
+  async login({email, password}: {email: string, password: string}): Promise<{ id: number, accessToken: string, refreshToken: string, role: string | null }> {
     const user = await this.getUserByEmail(email);
 
     if (!user) {
@@ -67,7 +68,7 @@ class AuthService {
     const refreshToken = signToken(user.id, user.email, '7d')
 
 
-    return {id: user.id, accessToken, refreshToken};
+    return {id: user.id, accessToken, refreshToken, role: user.role};
   }
 
   async refresh(refreshToken: string): Promise<{ id: number, accessToken: string, refreshToken: string }> {

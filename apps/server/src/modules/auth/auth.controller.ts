@@ -5,7 +5,14 @@ import {authService} from './auth.service';
 class AuthController {
   async signup(req: Request, res: Response) {
     const {email, password} = req.body;
-    const result = await authService.signup({email, password});
+    const result = await authService.signup({email, password, role: "user"});
+  
+    res.status(201).json({ success: true, data: result });
+  }
+
+  async signupAdmin(req: Request, res: Response) {
+    const {email, password} = req.body;
+    const result = await authService.signup({email, password, role: "admin"});
   
     res.status(201).json({ success: true, data: result });
   }

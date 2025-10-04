@@ -8,6 +8,7 @@ const router = Router();
 
 // Example route -> GET /api/v1/auth
 router.post('/signup', signupValidation, catchAsync(authController.signup));
+router.post('/admin/signup', signupValidation, catchAsync(authController.signupAdmin));
 router.post('/login', loginValidation, catchAsync(authController.login));
 router.post("/refresh", refreshValidation, catchAsync(authController.refresh))
 router.post("/forgot-password", forgotPasswordValidation, catchAsync(authController.forgotPassword))
