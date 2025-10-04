@@ -1,5 +1,7 @@
 import { pgTable, serial, integer, timestamp } from "drizzle-orm/pg-core";
 import { users } from "../../users/schema/user.schema"
+import { cartItems } from "./carts-item.schema";
+import { relations } from "drizzle-orm";
 
 export const carts = pgTable("carts", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

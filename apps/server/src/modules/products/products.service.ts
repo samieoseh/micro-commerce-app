@@ -8,7 +8,7 @@ import { ProductPayload, ProductUpdatePayload, SearchParams } from "./types/prod
 import { ApiError } from "../../utils/api-error";
 
 class ProductsService {
-    constructor(private db: NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>) {}
+    constructor(private db: NodePgDatabase<schema.Schema> | PgliteDatabase<schema.Schema>) {}
 
     async getProducts(page: number, limit: number) {
       const offset = (page - 1) * limit;

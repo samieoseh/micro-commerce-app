@@ -11,7 +11,7 @@ import { productsService } from "../products/products.service";
 
 
 class CartsService {
-  constructor(private db: NodePgDatabase<typeof schema> | PgliteDatabase<typeof schema>) {}
+  constructor(private db: NodePgDatabase<schema.Schema> | PgliteDatabase<schema.Schema>) {}
   
   async createCart(userId: number) {
     const cart: Cart = {
@@ -30,6 +30,7 @@ class CartsService {
   }
 
   async getCart(userId: number) {
+    console.log({userId})
     const [cart] = await this.db.select().from(carts).where(eq(carts.userId, userId));
 
     return cart
@@ -114,7 +115,7 @@ class CartsService {
       return sum + (item.quantity * +item.price)
     }, 0)
 
-    return {items, total};
+    return {items, total, cartId: cart.id};
 
   }
 
