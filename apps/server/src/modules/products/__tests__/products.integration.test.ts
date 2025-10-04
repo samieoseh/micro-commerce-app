@@ -4,8 +4,8 @@ import { setupTestDb } from "../../../tests/db-setup";
 import { productsService } from "../products.service";
 
 beforeEach(async () => {
-  const testDb = await setupTestDb();
-  (productsService as any).db = testDb;
+  const db = await setupTestDb();
+  (productsService as any).db = db;
 });
 
 const makePayload = (overrides: Record<string, any> = {}) => ({
