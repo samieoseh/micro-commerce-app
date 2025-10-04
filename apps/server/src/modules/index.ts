@@ -9,6 +9,6 @@ const router = Router();
 router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/products', productsRoutes);
-router.use('/carts', cartsRoutes);
+router.use('/cart', cartsRoutes);
 
 export default router;
