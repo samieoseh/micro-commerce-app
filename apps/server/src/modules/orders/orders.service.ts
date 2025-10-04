@@ -6,7 +6,6 @@ import { ApiError } from "../../utils/api-error";
 import { cartItems, } from "../carts/schema/carts-item.schema";
 import { and, eq } from "drizzle-orm";
 import { carts } from "../carts/schema/carts.schema";
-import { cartsService } from "../carts/carts.service";
 import { products } from "../products/schema/product.schema";
 import { productsService } from "../products/products.service";
 import { orders } from "./schema/orders.schema";
@@ -34,10 +33,24 @@ class OrdersService {
 
   async createOrder(userId: number) {
     return this.db.transaction(async (tx) => {
-      const itemsInCart = await cartsService.getItems(userId);
+      const [cart] = await tx.select().from(carts).where(eq(carts.userId, userId));
 
-      for(const item of itemsInCart.items) {
-        const product = await productsService.getProductById(item.productId);
+       if (!cart) {
+        throw new ApiError(404, "Cart not found")
+       }
+
+      const itemsInCart = await tx.select().from(cartItems).where(eq(cartItems.cartId, cart.id));
+
+      const total = itemsInCart.reduce((sum, item) => {
+          return sum + (item.quantity * +item.price)
+      }, 0)
+
+
+      for(const item of itemsInCart) {
+        const [product] = await tx.select().from(products).where(eq(products.id, item.productId));
+        if (!product) {
+          throw new ApiError(404, "Product not found")
+        }
 
         if(product.stock < item.quantity) {
           throw new ApiError(400, "Stock less than requested quantity")
@@ -51,10 +64,11 @@ class OrdersService {
       const [order] = await tx.insert(orders).values({
         userId,
         status: "pending",
-        total: itemsInCart.total.toString()
+        total: total.toString()
       }).returning()
 
-      for (const item of itemsInCart.items) {
+
+      for (const item of itemsInCart) {
         await tx.insert(orderItems).values({
           orderId: order.id,
           productId: item.productId,
@@ -64,7 +78,7 @@ class OrdersService {
         });
       }
 
-       await tx.delete(cartItems).where(eq(cartItems.cartId, itemsInCart.cartId));
+       await tx.delete(cartItems).where(eq(cartItems.cartId, cart.id));
        await tx.delete(carts).where(eq(carts.userId, userId))
 
        // TODO: Implemented payment and mark status to paid

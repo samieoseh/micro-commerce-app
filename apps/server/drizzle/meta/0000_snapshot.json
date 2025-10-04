@@ -1,5 +1,5 @@
 {
-  "id": "c5ba4220-b53a-45da-8772-b9b6d0851b94",
+  "id": "ad026dc9-732a-482d-94ec-72669c56d20f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -27,6 +27,12 @@
         },
         "cart_id": {
           "name": "cart_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -66,6 +72,19 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
+        "cart_items_user_id_users_id_fk": {
+          "name": "cart_items_user_id_users_id_fk",
+          "tableFrom": "cart_items",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
         "cart_items_product_id_products_id_fk": {
           "name": "cart_items_product_id_products_id_fk",
           "tableFrom": "cart_items",
@@ -76,7 +95,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },

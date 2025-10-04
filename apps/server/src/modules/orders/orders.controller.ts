@@ -12,6 +12,12 @@ class OrdersController {
   async getOrder(req: Request, res: Response) {
     const user = req.user as {id: number}
     const result = await ordersService.getOrder(user.id, +req.params.id);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
     res.json({ data: result, success: true });
   }
 

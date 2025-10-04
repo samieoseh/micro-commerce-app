@@ -30,7 +30,6 @@ class CartsService {
   }
 
   async getCart(userId: number) {
-    console.log({userId})
     const [cart] = await this.db.select().from(carts).where(eq(carts.userId, userId));
 
     return cart
@@ -82,6 +81,7 @@ class CartsService {
           productId: payload.productId,
           quantity: payload.quantity,
           price: payload.price,
+          userId
         })
         .returning();
 
@@ -119,20 +119,26 @@ class CartsService {
 
   }
 
-  async updateItem(itemId: number, payload: UpdateCartItemPayload) {
-    const item = await this.getItem(itemId);
+  async updateItem(userId: number, itemId: number, payload: UpdateCartItemPayload) {
+    const item = await this.getItem(userId, itemId);
     if (!item) {
       throw new ApiError(404, "Item not found in cart")
     }
 
-    const [updatedItem] = await this.db.update(cartItems).set(payload).where(eq(cartItems.id, itemId)).returning()
+    const [updatedItem] = await this.db.update(cartItems).set(payload).where(and(
+      eq(cartItems.id, itemId),
+      eq(cartItems.userId, userId)
+    )).returning()
 
     return updatedItem;
   }
 
-  async deleteItem(itemId: number) {
+  async deleteItem(userId: number, itemId: number) {
     await this.db.transaction(async (tx) => {
-      const [item] = await tx.select().from(cartItems).where(eq(cartItems.id, itemId));
+      const [item] = await tx.select().from(cartItems).where(and(
+        eq(cartItems.id, itemId),
+        eq(cartItems.userId, userId)
+      ));
 
       if (!item) {
         throw new ApiError(404, "Item not found in cart");
@@ -148,8 +154,11 @@ class CartsService {
     });
   }
 
-  async getItem(itemId: number) {
-    const [item] = await this.db.select().from(cartItems).where(eq(cartItems.id, itemId));
+  async getItem(userId: number, itemId: number) {
+    const [item] = await this.db.select().from(cartItems).where(and(
+      eq(cartItems.id, itemId),
+      eq(cartItems.userId, userId)
+    ));
 
     return item;
   }
