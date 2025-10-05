@@ -51,7 +51,6 @@ Create apps/server/.env.development with at least the following:
 ```
 # Server
 PORT=8080
-PORT=8080
 
 DATABASE_URL="replace-with-your-database-url"
 
@@ -76,13 +75,13 @@ npm install
 Ensure your DB is running and DATABASE_URL in .env.development are correct. Apply schema with Drizzle:
 ```bash
 cd apps/server
-npm db:push
+npm run db:push
 ```
 
 Alternatively, to generate SQL artifacts:
 ```bash
-npm db:gen
-npm db:migrate
+npm run db:gen
+npm run db:migrate
 ```
 ## Running the Server
 ```bash
@@ -99,13 +98,13 @@ curl http://localhost:8080/api/v1/healthz
 From the server directory:
 ```bash
 cd apps/server
-npm seed:all
+npm run seed:all
 ```
 
 ## Testing
 ```bash
 cd apps/server
-npm test
+npm run test
 ```
 
 Notes:
