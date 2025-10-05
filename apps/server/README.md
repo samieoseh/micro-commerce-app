@@ -60,6 +60,12 @@ RESEND_API_KEY=re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ
 APP_URL="http://localhost:3000"
 ```
 
+then copy the below to .env.test
+```
+JWT_SECRET="marvelouscomfort"
+RESEND_API_KEY="re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ"
+```
+
 ## Installation
 ```bash
 cd apps/server
@@ -81,7 +87,7 @@ npm db:migrate
 ## Running the Server
 ```bash
 cd apps/server
-npm run dev
+npx ts-node src/index.ts
 ```
 
 Health check:
