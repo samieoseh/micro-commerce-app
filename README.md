@@ -7,7 +7,7 @@ A monorepo for a micro-commerce platform consisting of a TypeScript/Express API 
 ```
 npm i
 ```
-- Navigate to the individual links above
+- Navigate to the individual links below
 - Then follow the instructions in each app’s README to run that app.
 
 ## Apps
