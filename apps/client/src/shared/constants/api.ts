@@ -13,4 +13,5 @@ export const CARTS_ENDPOINTS = {
   ADD_TO_CART: '/cart/items',
   UPDATE_IN_CART: (itemId: number) => `/cart/items/${itemId}`,
   REMOVE_FROM_CART: (itemId: number) => `/cart/items/${itemId}`,
+  CHECKOUT: '/orders',
 };

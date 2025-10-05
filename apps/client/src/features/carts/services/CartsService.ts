@@ -37,4 +37,12 @@ export class CartsService {
         )
         return results.data
     }
+
+    static async checkout() {
+        const results = await basicApiClient.post<{message: string}>(
+            CARTS_ENDPOINTS.CHECKOUT,
+            {}
+        )
+        return results.data
+    }
 }

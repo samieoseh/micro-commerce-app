@@ -46,10 +46,20 @@ export function useCartsMutation() {
     }
   })
 
+  const checkout = useMutation({
+    mutationFn: () => CartsService.checkout(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CARTS_QUERY_KEY] })
+    },
+    onError: (error) => {
+      console.error('Error during checkout:', error)
+    }
+  })
 
   return {
     addToCart,
     updateItemInCart,
-    removeItemFromCart
+    removeItemFromCart,
+    checkout,
   }
 } 

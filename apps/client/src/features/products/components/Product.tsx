@@ -65,6 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
       <Card.Content style={{ paddingVertical: 8 }}>
         <Text variant="bodySmall">{product.name}</Text>
         <Text variant="labelSmall">{product.brand} • {product.category}</Text>
+        <Text variant="labelSmall">{product.stock} left</Text>
         <Text variant="bodyMedium" style={styles.price}>${product.price}</Text>
       </Card.Content>
 

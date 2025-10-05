@@ -40,7 +40,7 @@ class BasicApiClient {
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-      console.log(`${config.baseURL}${config.url}`);
+      // console.log(`${config.baseURL}${config.url}`);
       return config;
     });
 
