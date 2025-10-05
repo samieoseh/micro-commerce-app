@@ -47,7 +47,8 @@ apps/server/
 ## Environment Variables
 Environment files are loaded per NODE_ENV, e.g. .env.development, .env.test.
 
-Create apps/server/.env.development with at least the following:
+>Create apps/server/.env.development with at least the following:
+
 ```
 # Server
 PORT=8080
@@ -64,6 +65,8 @@ then copy the below to .env.test
 JWT_SECRET="marvelouscomfort"
 RESEND_API_KEY="re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ"
 ```
+
+>You can get a DATABASE_URL from [Neon](https://neon.com) or setup Postgresql manually on your local machine
 
 ## Installation
 ```bash

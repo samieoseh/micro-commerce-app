@@ -20,10 +20,6 @@ Testing: Jest + React Native Testing Library
 
 ## Requirements
 - Node.js 18+
-- Expo CLI installed globally
-```bash
-npm install -g expo-cli
-```
 - Expo-Go App (Install from playstore)
 - Backend server running (from the Micro Commerce Server project)
    - API Base URL reachable (e.g. http://localhost:8080/api/v1)
@@ -43,7 +39,7 @@ npx expo start
 ```
 
 ## Environment Variables
-Create an .env.development file in apps/client/ and copy the url that running `npx expo start` gives e.g `exp://192.168.1.119:8081`, copy the `191.168.1.119` to .env.development as `http://191.168.1.119:8080/api/v1`
+Create an `.env.development` file in `apps/client/` and copy the url that you get from running `npx expo start` e.g if you get `exp://192.168.1.119:8081`, copy the `191.168.1.119` to .env.development as `EXPO_PUBLIC_API_URL=http://191.168.1.119:8080/api/v1`
 
 ```
 EXPO_PUBLIC_API_URL=your-expo-url-you-get-from-running-command-above
