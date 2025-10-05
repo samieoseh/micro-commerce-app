@@ -4,7 +4,6 @@ import { ApiError } from "../utils/api-error";
 export const requireRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as { id: number; role: string } | undefined;
-
     if (!user) {
         throw new ApiError(401, "Unauthorized")
     }

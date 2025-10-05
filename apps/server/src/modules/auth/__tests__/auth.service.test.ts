@@ -8,9 +8,10 @@ import { users } from "../../users/schema/user.schema";
 
 describe("AuthService (unit, in-memory DB)", () => {
   let authService: AuthService;
+  let db: any;
 
   beforeEach(async () => {
-    const db = await setupTestDb();
+    db = await setupTestDb();
     authService = new AuthService(db);
   });
 
@@ -107,7 +108,7 @@ describe("AuthService (unit, in-memory DB)", () => {
       await authService.signup({ email: "unit7@example.com", password: "secret" });
       await authService.forgotPassword("unit7@example.com");
 
-      expect(spy).toHaveBeenCalledWith(expect.any(Number), "unit7@example.com", "5m");
+      expect(spy).toHaveBeenCalledWith({id: expect.any(Number), email:"unit7@example.com", role: "user"}, "5m");
     });
 
     it("does nothing if user does not exist", async () => {
@@ -124,7 +125,7 @@ describe("AuthService (unit, in-memory DB)", () => {
         password: "secret",
       });
 
-      const resetToken = common.signToken(id, "unit8@example.com", "5m");
+      const resetToken = common.signToken({id, email: "unit8@example.com"}, "5m");
 
       const updated = await authService.resetPassword({
         token: resetToken,

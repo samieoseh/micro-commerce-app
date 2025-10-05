@@ -13,7 +13,6 @@ class AuthService {
 
   async signup({email, password, role}: {email: string, password: string, role?: string}): Promise<{ id: number, accessToken: string, refreshToken: string, role: string | null }> {
     const userExists = await this.userExists(email);
-
     if (userExists) {
       throw new ApiError(409, "User already exists")
     }

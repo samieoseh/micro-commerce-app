@@ -6,6 +6,7 @@ import { productsService } from "../../products/products.service";
 import { cartsService } from "../../carts/carts.service";
 import { ordersService } from "../orders.service";
 import { authService } from "../../auth/auth.service";
+import { verifyToken } from "../../../utils/common";
 
 let user: any;
 let token: string;
@@ -17,7 +18,7 @@ beforeEach(async () => {
   (ordersService as any).db = db;
   (authService as any).db = db;
 
-  user = await authService.signup({ email: "orderuser@example.com", password: "Password@123" });
+  user = await authService.signup({ email: "orderuser@example.com", password: "Password@123", role: "admin" });
   token = user.accessToken;
 
 });

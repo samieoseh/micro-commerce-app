@@ -124,8 +124,9 @@ describe("Auth API Integration", () => {
 
       expect([200, 204]).toContain(res.status);
       expect(common.signToken).toHaveBeenCalledWith(
-        expect.any(Number),
-        "test6@example.com",
+        {id: expect.any(Number),
+        email: "test6@example.com",
+        role: "user"},
         "5m"
       );
     });
@@ -139,8 +140,9 @@ describe("Auth API Integration", () => {
         .send({ email: "test7@example.com", password: "Password@123" });
 
       const resetToken = common.signToken(
-        signup.body.data.id,
-        "test7@example.com",
+        {id: signup.body.data.id,
+        email: "test7@example.com",
+        },
         "5m"
       );
 

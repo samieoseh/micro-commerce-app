@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === "test") {
     // attach a fake user 
-    (req as any).user = { id: 1 };
+    (req as any).user = { id: 1, role: "admin" };
     return next();
   }
 
