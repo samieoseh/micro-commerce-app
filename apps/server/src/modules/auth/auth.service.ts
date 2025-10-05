@@ -30,8 +30,8 @@ class AuthService {
       throw new ApiError(500, "Failed to create user, please try again later");
     }
 
-    const accessToken = signToken(newUser.id, newUser.email);
-    const refreshToken = signToken(newUser.id, newUser.email, '7d')
+    const accessToken = signToken({id: newUser.id, email: newUser.email, role: newUser.role});
+    const refreshToken = signToken({id: newUser.id, email: newUser.email, role: newUser.role}, '7d')
 
 
     return {id: newUser.id, accessToken, refreshToken, role: newUser.role};
@@ -64,8 +64,8 @@ class AuthService {
       throw new ApiError(401, "Invalid email or password");
     }
 
-    const accessToken = signToken(user.id, user.email);
-    const refreshToken = signToken(user.id, user.email, '7d')
+    const accessToken = signToken({id: user.id, email: user.email, role: user.role});
+    const refreshToken = signToken({id: user.id, email: user.email, role: user.role}, '7d')
 
 
     return {id: user.id, accessToken, refreshToken, role: user.role};
@@ -83,7 +83,7 @@ class AuthService {
       throw new ApiError(401, "Invalid refresh token");
     }
 
-    const newAccessToken = signToken(user.id, user.email);
+    const newAccessToken = signToken({id: user.id, email: user.email, role: user.role});
 
     return {id: user.id, accessToken: newAccessToken, refreshToken}
 
@@ -95,7 +95,7 @@ class AuthService {
     if (!user) {
       return // so as not to expose user
     }
-    const token = signToken(user.id, user.email, "5m");
+    const token = signToken({id: user.id, email: user.email, role: user.role}, "5m");
 
     const link = `${process.env.APP_URL}/verify-reset-password-token?token=${token}`;
 

@@ -13,7 +13,8 @@
     "db:migrate": "npx drizzle-kit migrate",
     "seed:users": "ts-node src/scripts/seed-users.ts",
     "seed:products": "ts-node src/scripts/seed-products.ts",
-    "seed:all": "ts-node src/scripts/seed-users.ts && ts-node src/scripts/seed-products.ts"
+    "seed:all": "ts-node src/scripts/seed-users.ts && ts-node src/scripts/seed-products.ts",
+    "drop:all": "ts-node src/scripts/drop-all.ts"
   },
   "keywords": [],
   "author": "",

@@ -16,7 +16,7 @@ export function SignInPasswordForm() {
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: 'samieoseh@gmail.com',
+      email: 'admin@example.com',
       password: 'Password@123',
     },
   });

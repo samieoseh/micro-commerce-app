@@ -17,7 +17,7 @@ const pool = new Pool({
 const db = drizzle(pool);
 
 async function seedUsers() {
-  const passwordHash = await bcrypt.hash('password123', 10);
+  const passwordHash = await bcrypt.hash('Password@123', 10);
 
   // Check if users already exist
   const existingUsers = await db.select().from(users);

@@ -28,10 +28,12 @@ export default function RootLayout() {
           const token = await tokenStorage.getAccessToken();
           setSession(token);
           setWaitLoading(false);
+          console.log({token: getSubFromToken(token)})
           setUser(getSubFromToken(token));
        } catch (error) {
           console.error('Error fetching token:', error);
           setWaitLoading(false);
+        
        } 
     }
     fetchToken()
@@ -41,6 +43,7 @@ export default function RootLayout() {
     return <LoadingIndicator />
   }
 
+  console.log({session})
   if(!session) {
     return <Redirect href="/sign-in" />
   }
@@ -49,6 +52,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="products" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

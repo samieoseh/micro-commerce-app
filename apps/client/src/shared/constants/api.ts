@@ -6,6 +6,7 @@ export const AUTH_ENDPOINTS = {
 
 export const PRODUCTS_ENDPOINTS = {
   GET_ALL: '/products',
+  CREATE: '/products',
 };
 
 export const CARTS_ENDPOINTS = {

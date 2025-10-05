@@ -1,6 +1,6 @@
 import { PRODUCTS_ENDPOINTS } from "@/src/shared/constants";
 import { basicApiClient, safeRequest } from "@/src/shared/services";
-import { Product } from "../types/products";
+import { Product, CreateProductPayload } from "../types/products";
 
 export class ProductsService {
     static async getAll() {
@@ -8,5 +8,13 @@ export class ProductsService {
             PRODUCTS_ENDPOINTS.GET_ALL,
         ))
         return results?.data.products
+    }
+
+    static async create(payload: CreateProductPayload) {
+        const results = await safeRequest(() => basicApiClient.post<{data: Product}>(
+            PRODUCTS_ENDPOINTS.CREATE,
+            payload,
+        ))
+        return results?.data
     }
 }
