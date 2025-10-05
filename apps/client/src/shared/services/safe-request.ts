@@ -16,6 +16,6 @@ export async function safeRequest<T>(
       toast(getErrorMessage(apiError));
     }
 
-    return null;
+    throw apiError;
   }
 }

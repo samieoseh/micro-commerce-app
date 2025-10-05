@@ -1,7 +1,7 @@
 import { Button } from "@/src/shared/components";
-import { Button as RNButton } from "react-native-paper"
+import { Button as RNButton } from "react-native-paper";
 import * as React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Dimensions, TextInput, View } from "react-native";
 import { Card, Text, IconButton, useTheme } from "react-native-paper";
 import { Product } from "../types/products";
 import { CartItem } from "../../carts/types/cart";
@@ -14,10 +14,21 @@ interface ProductCardProps {
   carts?: CartItem[];
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdateCart, onRemoveCart, carts, }) => {
-    const {colors} = useTheme()
+const { width } = Dimensions.get("window");
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onAddToCart,
+  onUpdateCart,
+  onRemoveCart,
+  carts,
+}) => {
+  const { colors } = useTheme();
+
   const cartItem = carts?.find((c) => c.productId === product.id);
-  const [quantity, setQuantity] = React.useState<number | string>(cartItem?.quantity ?? 0);
+  const [quantity, setQuantity] = React.useState<number | string>(
+    cartItem?.quantity ?? 0
+  );
 
   React.useEffect(() => {
     if (cartItem) {
@@ -26,9 +37,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
   }, [cartItem]);
 
   const handleIncrement = () => {
-    const newQty = +quantity + 1;
-    setQuantity(newQty);
-    onUpdateCart?.(product.id, newQty);
+    if (+quantity < product.stock) {
+      const newQty = +quantity + 1;
+      setQuantity(newQty);
+      onUpdateCart?.(product.id, newQty);
+    }
   };
 
   const handleDecrement = () => {
@@ -39,7 +52,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
     } else {
       onRemoveCart?.(product.id);
     }
-
   };
 
   const handleRemove = () => {
@@ -49,8 +61,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
 
   const handleDirectInput = (text: string) => {
     const parsed = parseInt(text, 10);
-    if(isNaN(parsed)) {
-        setQuantity("");
+    if (isNaN(parsed)) {
+      setQuantity("");
     }
     if (!isNaN(parsed) && parsed >= 0) {
       setQuantity(parsed);
@@ -59,32 +71,36 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
   };
 
   return (
-    <Card style={styles.card}>
+    <Card className="rounded-xl" style={{ width: width / 2 - 20, elevation: 4, marginBottom: 10 }}>
       <Card.Cover source={{ uri: product.imageUrl }} />
 
-      <Card.Content style={{ paddingVertical: 8 }}>
-        <Text variant="bodySmall">{product.name}</Text>
-        <Text variant="labelSmall">{product.brand} • {product.category}</Text>
-        <Text variant="labelSmall">{product.stock} left</Text>
-        <Text variant="bodyMedium" style={styles.price}>${product.price}</Text>
+      <Card.Content style={{paddingVertical: 8}}>
+        <Text variant="bodySmall" style={{color: colors.primary,}}>{product.name}</Text>
+        <Text variant="labelSmall" style={{fontWeight: "300"}}>
+          {product.brand} • {product.category}
+        </Text>
+        <Text variant="bodySmall">{product.stock > 0 ? `${product.stock} left`: "Out of stock"}</Text>
+        <Text variant="bodyMedium" style={{fontWeight:"bold", marginTop: 4}}>
+          ${product.price}
+        </Text>
       </Card.Content>
 
       <Card.Actions>
-        {!cartItem || quantity === 0 ? (
+        {!cartItem ? (
           <Button
             size="sm"
             mode="contained"
+            disabled={product.stock === 0}
             onPress={() => onAddToCart?.(product.id, 1)}
           >
             Add to Cart
           </Button>
         ) : (
-          <View style={styles.quantityContainer}>
-            <IconButton
+          <View className="flex-row items-center flex-1 justify-center">
+             <IconButton
               icon="minus"
               size={20}
               onPress={handleDecrement}
-              disabled={+quantity <= 0}
               iconColor={colors.onPrimary}
               containerColor={colors.primary + '20'}
               style={{
@@ -92,7 +108,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
               }}
             />
             <TextInput
-              style={[styles.input, { color: colors.onBackground }]}
+              style={{ 
+                  width: 40,
+                  height: 32,
+                  borderWidth: 1,
+                  borderColor: "#ccc",
+                  borderRadius: 6,
+                  textAlign: "center",
+                  marginHorizontal: 8,
+                  padding: 0,
+                  color: colors.onBackground 
+                }}
               value={quantity.toString()}
               keyboardType="numeric"
               onChangeText={handleDirectInput}
@@ -108,61 +134,26 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onUpdat
               }}
               onPress={handleIncrement}
             />
-            
           </View>
         )}
       </Card.Actions>
       {cartItem && +quantity > 0 && (
-        <View className="px-3 pb-3 w-full flex flex-row justify-end">
-        <RNButton
-        mode="outlined"
-        
-        onPress={handleRemove}
-        style={styles.removeButton}
-        textColor={colors.error}
-        >
+        <View style={{
+           padding: 4, marginBottom: 12
+        }}>
+          <RNButton
+            mode="outlined"
+            onPress={handleRemove}
+            className="ml-3 w-24 p-0"
+            style={{ borderColor: colors.error, borderWidth: 1 }}
+            textColor={colors.error}
+          >
             Remove
-        </RNButton>
-      </View>
+          </RNButton>
+        </View>
       )}
     </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    borderRadius: 12,
-    elevation: 4,
-    marginBottom: 10,
-  },
-  price: {
-    fontWeight: "bold",
-    marginTop: 4,
-  },
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-  },
-  input: {
-    width: 40,
-    height: 32,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    textAlign: "center",
-    marginHorizontal: 8,
-    padding: 0,
-  },
-  removeButton: {
-    borderColor: "red",
-    borderWidth: 1,
-    borderRadius: 6,
-    marginLeft: 12,
-    width: 100,
-    padding: 0,
-  },
-});
 
 export default ProductCard;

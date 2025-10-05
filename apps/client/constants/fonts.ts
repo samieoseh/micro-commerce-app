@@ -67,7 +67,7 @@ export const fontConfig = {
   },
   labelSmall: {
     fontFamily: 'BricolageGrotesque-Regular',
-    fontSize: 11,
+    fontSize: 10,
     letterSpacing: 0.5,
     lineHeight: 16,
   },

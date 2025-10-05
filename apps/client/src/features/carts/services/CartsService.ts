@@ -1,48 +1,45 @@
 import { CARTS_ENDPOINTS } from "@/src/shared/constants";
-import { basicApiClient } from "@/src/shared/services";
+import { basicApiClient, safeRequest } from "@/src/shared/services";
 import {  CartItem, CartItemPayload } from "../types/cart";
 
 export class CartsService {
     static async getAll() {
        try {
-        const results = await basicApiClient.get<{data: {items: CartItem[], total: number}}>(
+        const results = await safeRequest(() => basicApiClient.get<{data: {items: CartItem[], total: number}}>(
             CARTS_ENDPOINTS.GET_ALL_ITEMS,
-        )
-        return results.data
+        ))
+        return results?.data
        } catch (error) {
             return {items: [], total: 0}
        }
     }
 
     static async addToCart(payload: CartItemPayload) {
-       const results = await basicApiClient.post<{data: CartItem[]}>(
+       const results = await safeRequest(() => basicApiClient.post<{data: CartItem[]}>(
             CARTS_ENDPOINTS.ADD_TO_CART,
             payload
-        )
-        return results.data
+        ))
+        return results?.data
     }
 
     static async updateItemInCart(itemId: number, payload: CartItemPayload) {
-       const results = await basicApiClient.put<{data: CartItem[]}>(
+       const results = await safeRequest(() => basicApiClient.put<{data: CartItem[]}>(
             CARTS_ENDPOINTS.UPDATE_IN_CART(itemId),
             payload
-        )
-        console.log(results);
-        return results.data
+        ))
+        return results?.data
     }
 
     static async removeItemFromCart(itemId: number) {
-         const results = await basicApiClient.delete<{data: CartItem[]}>(
+         const results = await safeRequest(() => basicApiClient.delete<{data: CartItem[]}>(
             CARTS_ENDPOINTS.REMOVE_FROM_CART(itemId),
-        )
-        return results.data
+        ))
+        return results?.data
     }
 
     static async checkout() {
-        const results = await basicApiClient.post<{message: string}>(
+       return await safeRequest(() =>basicApiClient.post<{message: string}>(
             CARTS_ENDPOINTS.CHECKOUT,
-            {}
-        )
-        return results.data
+        ))
     }
 }
