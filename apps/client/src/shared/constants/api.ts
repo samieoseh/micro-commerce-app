@@ -7,6 +7,8 @@ export const AUTH_ENDPOINTS = {
 export const PRODUCTS_ENDPOINTS = {
   GET_ALL: '/products',
   CREATE: '/products',
+  UPDATE: (id: number) => `/products/${id}`,
+  DELETE: (id: number) => `/products/${id}`,
 };
 
 export const CARTS_ENDPOINTS = {

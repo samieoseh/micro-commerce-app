@@ -17,4 +17,19 @@ export class ProductsService {
         ))
         return results?.data
     }
+
+    static async update(id: number, payload: CreateProductPayload) {
+        const results = await safeRequest(() => basicApiClient.put<{data: Product}>(
+            PRODUCTS_ENDPOINTS.UPDATE(id),
+            payload,
+        ))
+        return results?.data
+    }
+
+    static async remove(id: number) {
+        const results = await safeRequest(() => basicApiClient.delete<{message: string}>(
+            PRODUCTS_ENDPOINTS.DELETE(id),
+        ))
+        return results?.data
+    }
 }

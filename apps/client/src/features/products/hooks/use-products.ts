@@ -23,5 +23,26 @@ export function useProductsMutation() {
     },
   })
 
-  return { createProduct }
+  const updateProduct = useMutation({
+    mutationFn: (payload: { id: number; data: CreateProductPayload }) =>
+      ProductsService.update(payload.id, payload.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_QUERY_KEY] })
+    },
+    onError: (error) => {
+      console.error('Error updating product:', error)
+    },
+  })
+
+  const deleteProduct = useMutation({
+    mutationFn: (id: number) => ProductsService.remove(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_QUERY_KEY] })
+    },
+    onError: (error) => {
+      console.error('Error deleting product:', error)
+    },
+  })
+
+  return { createProduct, updateProduct, deleteProduct }
 }
