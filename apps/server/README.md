@@ -20,7 +20,7 @@ A TypeScript/Express server for a micro commerce application. It provides authen
 ## Requirements
 - Node.js 18+
 - PostgreSQL 14+ available and reachable for development
-- Package manager: pnpm (recommended for monorepo), npm, or yarn
+- Package manager: npm, or yarn
 
 ## Project Structure (server)
 ```
@@ -51,67 +51,59 @@ Create apps/server/.env.development with at least the following:
 ```
 # Server
 PORT=8080
-NODE_ENV=development
-APP_URL=http://localhost:3000
+PORT=8080
 
-# JWT
-JWT_SECRET=replace-with-a-strong-secret
+DATABASE_URL="replace-with-your-database-url"
 
-# PostgreSQL
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=micro_commerce
-
-# Email (Resend)
-RESEND_API_KEY=replace-with-your-resend-api-key
+JWT_SECRET="marvelouscomfort"
+RESEND_API_KEY=re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ
+APP_URL="http://localhost:3000"
 ```
-Notes:
-- RESEND_API_KEY is required at runtime if you use the forgot-password flow.
-- The server reads .env.<NODE_ENV> (e.g. .env.development) at startup.
 
 ## Installation
-From the repo root (recommended with pnpm workspace):
-- pnpm install
-
-Or from the server app directory only:
-- cd apps/server
-- pnpm install
-
-npm/yarn users can substitute their package manager equivalents.
+```bash
+cd apps/server
+npm install
+```
 
 ## Database Setup (Drizzle ORM + PostgreSQL)
-Ensure your DB is running and the credentials in .env.development are correct. Apply schema with Drizzle:
-- pnpm --filter server db:push
+Ensure your DB is running and DATABASE_URL in .env.development are correct. Apply schema with Drizzle:
+```bash
+cd apps/server
+npm db:push
+```
 
 Alternatively, to generate SQL artifacts:
-- pnpm --filter server db:gen
-- pnpm --filter server db:migrate
-
+```bash
+npm db:gen
+npm db:migrate
+```
 ## Running the Server
-Development (TypeScript via ts-node):
-- pnpm --filter server dev
-
-Directly in the server directory:
-- cd apps/server
-- pnpm dev
+```bash
+cd apps/server
+npm run dev
+```
 
 Health check:
-- curl http://localhost:8080/api/v1/healthz
+```bash
+curl http://localhost:8080/api/v1/healthz
+```
 
 ## Seeding Sample Data
 From the server directory:
-- pnpm seed:users
-- pnpm seed:products
-- pnpm seed:all
+```bash
+cd apps/server
+npm seed:all
+```
 
 ## Testing
-- pnpm --filter server test
+```bash
+cd apps/server
+npm test
+```
 
 Notes:
 - In NODE_ENV=test, the auth middleware stubs a user for convenience in some flows.
-- Testcontainers is available to run PostgreSQL in tests, but ensure Docker is running if tests rely on it.
 
 ## API Endpoints
 Base path: /api/v1
@@ -130,13 +122,13 @@ Base path: /api/v1
 
 Examples:
 Signup
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"Passw0rd!"}'
 ```
 Response (201)
-```
+```bash
 {
   "success": true,
   "data": {
@@ -149,13 +141,13 @@ Response (201)
 ```
 
 Login
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"Passw0rd!"}'
 ```
 Response (200)
-```
+```bash
 {
   "success": true,
   "data": {
@@ -168,21 +160,21 @@ Response (200)
 ```
 
 Refresh Access Token
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/auth/refresh \
   -H "Content-Type: application/json" \
   -d '{"refreshToken":"<jwt>"}'
 ```
 
 Forgot Password (sends email via Resend)
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/auth/forgot-password \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com"}'
 ```
 
 Reset Password
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/auth/reset-password \
   -H "Content-Type: application/json" \
   -d '{"token":"<token-from-email>","newPassword":"NewPassw0rd!"}'
@@ -199,12 +191,12 @@ All product routes require authentication. Creating/updating/deleting requires a
 - DELETE /api/v1/products/:id (admin)
 
 List Products
-```
+```bash
 curl http://localhost:8080/api/v1/products \
   -H "Authorization: Bearer <accessToken>"
 ```
 Create Product (admin)
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/products \
   -H "Authorization: Bearer <adminAccessToken>" \
   -H "Content-Type: application/json" \
@@ -219,7 +211,7 @@ curl -X POST http://localhost:8080/api/v1/products \
 ```
 
 Typical success response
-```
+```bash
 {
   "success": true,
   "data": { ... }
@@ -240,7 +232,7 @@ All cart routes require authentication.
 - GET /api/v1/cart/items/:itemId
 
 Add Item
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/cart/items \
   -H "Authorization: Bearer <accessToken>" \
   -H "Content-Type: application/json" \
@@ -256,44 +248,30 @@ All order routes require authentication.
 - GET /api/v1/orders/history/:id
 
 Create Order
-```
+```bash
 curl -X POST http://localhost:8080/api/v1/orders \
   -H "Authorization: Bearer <accessToken>"
 ```
 
-### Users
-- GET /api/v1/users
-
-```
-curl http://localhost:8080/api/v1/users
-```
 
 ## Error Handling
 Errors are returned with appropriate HTTP status codes, typically:
-```
+```bash
 {
   "message": "Validation error",
   "errors": [ ... ]
 }
 ```
 Or domain errors like:
-```
+```bash
 {
   "message": "Unauthorized: You must be logged in to access this resource"
 }
 ```
 
 ## Known Limitations
-- Email delivery requires RESEND_API_KEY configured and reachable; otherwise forgot-password will throw at runtime.
+- Email delivery is only sent to my mail since it was use to obtain the RESEND_API_KEY. Paying for a plan mitigates it.
 - Some simple endpoints (e.g., users) are stubbed for demonstration.
-
-## Useful Scripts
-From apps/server/package.json:
-- dev: nodemon + ts-node (watches src)
-- start: node dist/index.js (requires a build step)
-- test: jest (Windows env flag for Node ESM support)
-- db:push | db:gen | db:migrate: Drizzle schema ops
-- seed:users | seed:products | seed:all: Populate sample data
 
 ## License
 MIT (or as specified in the repository)
