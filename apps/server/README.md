@@ -47,7 +47,7 @@ apps/server/
 ## Environment Variables
 Environment files are loaded per NODE_ENV, e.g. .env.development, .env.test.
 
->Create apps/server/.env.development with at least the following:
+>In  apps/server create `.env.development` with at least the following:
 
 ```
 # Server
@@ -60,7 +60,7 @@ RESEND_API_KEY=re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ
 APP_URL="http://localhost:3000"
 ```
 
-then copy the below to .env.test
+Also create `.env.test` copy the below:
 ```
 JWT_SECRET="marvelouscomfort"
 RESEND_API_KEY="re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ"
