@@ -6,10 +6,12 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import TabBarBackground from '@/components/ui/tabbar-background';
 import { useTheme } from 'react-native-paper';
 import { useCarts } from '@/src/features/carts/hooks';
+import { useAuthStore } from '@/src/shared/store/auth-store';
 
 export default function TabLayout() {
   const { colors } = useTheme();
   const {data: carts} = useCarts();
+  const {user} = useAuthStore()
   
   return (
     <Tabs
@@ -63,6 +65,24 @@ export default function TabLayout() {
         
       />
      
+     {user?.role === 'admin' ? (
+        <Tabs.Screen
+          name="admin"
+          options={{
+            title: 'Admin',
+            tabBarIcon: ({ color }) => (
+              <IconSymbol size={28} name="gearshape.fill" color={color} />
+            ),
+          }}
+        />
+      ) : (
+        <Tabs.Screen
+          name="admin"
+          options={{
+            href: null, 
+          }}
+        />
+      )}
     </Tabs>
   );
 }
