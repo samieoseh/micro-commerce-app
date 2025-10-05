@@ -10,7 +10,7 @@ import { useCarts } from '@/src/features/carts/hooks';
 export default function TabLayout() {
   const { colors } = useTheme();
   const {data: carts} = useCarts();
-  console.log({carts})
+  
   return (
     <Tabs
       screenOptions={{
