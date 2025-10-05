@@ -45,7 +45,7 @@ apps/server/
 ```
 
 ## Environment Variables
-Environment files are loaded per NODE_ENV, e.g. .env.development, .env.production, .env.test.
+Environment files are loaded per NODE_ENV, e.g. .env.development, .env.test.
 
 Create apps/server/.env.development with at least the following:
 ```

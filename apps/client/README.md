@@ -1,50 +1,73 @@
-# Welcome to your Expo app 👋
+# Micro Commerce App — Client
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native + Expo mobile client for the Micro Commerce platform.
+It connects to the Express + PostgreSQL backend via REST API and provides a mobile commerce experience — user authentication, product browsing, cart and checkout
 
-## Get started
+## Tech Stack
+- Framework: React Native (Expo)
+- Language: TypeScript
+- Navigation: Expo Router
+- State Management: Zustand (lightweight store)
+- Networking: Axios
+- Authentication: JWT-based (stored securely via Expo SecureStore)
+- UI Components: React Native Paper / NativeWind (Tailwind for RN)
+- Form Handling: React Hook Form + Zod
+- API Integration: REST (connects to /api/v1 endpoints of the server)
+- Build/Deployment: Expo CLI (Managed Workflow)
 
-1. Install dependencies
+Testing: Jest + React Native Testing Library
 
-   ```bash
-   npm install
-   ```
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+## Requirements
+- Node.js 18+
+- Expo CLI installed globally
 ```bash
-npm run reset-project
+npm install -g expo-cli
+```
+- Expo-Go App (Install from playstore)
+- Backend server running (from the Micro Commerce Server project)
+   - API Base URL reachable (e.g. http://localhost:8080/api/v1)
+- Package manager: npm
+
+## Installation & Running the App
+
+### Installation
+```bash
+cd apps/client
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Running the app
+```bash
+npx expo start
+```
 
-## Learn more
+## Environment Variables
+Create an .env.development file in apps/client/ and copy the url that running `npx expo start` gives e.g `http://192.168.1.119:8080/api/v1` to .env.development
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+EXPO_PUBLIC_API_URL=your-expo-url-you-get-from-running-command-above
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Authentication Flow
+- Signup/Login using /api/v1/auth endpoints
+- JWT tokens stored via expo-secure-store
+- Axios interceptors automatically attach Authorization: Bearer <token>
+- Refresh token handled silently via /auth/refresh
 
-## Join the community
+## Features
 
-Join our community of developers creating universal apps.
+| Feature | Description |
+|----------|--------------|
+| **Authentication** | Signup, Login, Forgot/Reset password |
+| **Product Catalog** | Browse |
+| **Cart** | Add, remove, and update items |
+| **Orders** | Checkout |
+| **Auto Refresh** | Refresh access token using stored refresh token |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Known Limitations
+- Backend dependency: The app requires the server API to be live — it doesn’t work offline yet.
+- Email verification: Password reset email yet to be implemented
+- No push notifications (planned for future version).
+- Limited admin functionality: Admin operations
+- Caching and offline support minimal.
