@@ -63,7 +63,7 @@ APP_URL="http://localhost:3000"
 Also create `.env.test` copy the below:
 ```
 JWT_SECRET="marvelouscomfort"
-RESEND_API_KEY="re_CaWb7Mee_5xXBQhQEEBq7NWreHEt9j9AQ"
+RESEND_API_KEY="your-resend-api-key"
 ```
 
 >You can get a DATABASE_URL from [Neon](https://neon.com) or setup Postgresql manually on your local machine
@@ -278,7 +278,7 @@ Or domain errors like:
 ```
 
 ## Known Limitations
-- Email delivery is only sent to my mail since it was use to obtain the RESEND_API_KEY. Paying for a plan mitigates it.
+- Email delivery does not go because you need to obtain the RESEND_API_KEY.
 - Some simple endpoints (e.g., users) are stubbed for demonstration.
 
 ## License
